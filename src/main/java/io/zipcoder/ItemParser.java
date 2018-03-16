@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 public class ItemParser {
     private int itemCount;
+    private int errorCount;
 
     public ArrayList<String> parseRawDataIntoStringArray(String rawData){
         String stringPattern = "##";
@@ -30,21 +31,25 @@ public class ItemParser {
         while (matcher.find()) {
             try {
                 itemName = matcher.group(1);
+                if (itemName == "") errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
-            try {
-                itemPrice = matcher.group(2);
-            } catch (Exception e){
-                throw new ItemParseException();
-            }
+                if (matcher.group(2).equals("")) {
+                    errorCount++;
+                    itemPrice = "0.0";
+                } else {
+                    itemPrice = matcher.group(2);
+                }
             try {
                 itemType = matcher.group(3);
+                if (itemType == "") errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
             try {
                 itemExpiration = matcher.group(4);
+                if (itemExpiration == "") errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
