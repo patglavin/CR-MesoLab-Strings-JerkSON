@@ -2,12 +2,14 @@ package io.zipcoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ItemParser {
     private int itemCount;
     private int errorCount;
+    private HashMap<String, Entry> listMap = new HashMap<String, Entry>();
 
     public ArrayList<String> parseRawDataIntoStringArray(String rawData){
         String stringPattern = "##";
@@ -18,6 +20,10 @@ public class ItemParser {
 
     public int getItemCount() {
         return itemCount;
+    }
+
+    public int getErrorCount(){
+        return errorCount;
     }
 
     public Item parseStringIntoItem(String rawItem) throws ItemParseException{
@@ -31,30 +37,33 @@ public class ItemParser {
         while (matcher.find()) {
             try {
                 itemName = matcher.group(1);
-                if (itemName == "") errorCount++;
+                itemName = itemName.replace("0", "o");
+                if (itemName.equals("")) errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
-                if (matcher.group(2).equals("")) {
-                    errorCount++;
-                    itemPrice = "0.0";
-                } else {
-                    itemPrice = matcher.group(2);
-                }
+            if (matcher.group(2).equals("")) {
+                errorCount++;
+                itemPrice = "0.0";
+            } else {
+                itemPrice = matcher.group(2);
+            }
             try {
                 itemType = matcher.group(3);
-                if (itemType == "") errorCount++;
+                if (itemType.equals("")) errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
             try {
                 itemExpiration = matcher.group(4);
-                if (itemExpiration == "") errorCount++;
+                if (itemExpiration.equals("")) errorCount++;
             } catch (Exception e){
                 throw new ItemParseException();
             }
         }
-        return new Item(itemName.toLowerCase(), Double.parseDouble(itemPrice), itemType.toLowerCase(), itemExpiration);
+        Item tempItem = new Item(itemName.toLowerCase(), Double.parseDouble(itemPrice), itemType.toLowerCase(), itemExpiration);
+        buildList(tempItem);
+        return tempItem;
     }
 
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
@@ -65,6 +74,17 @@ public class ItemParser {
 
     private ArrayList<String> splitStringWithRegexPattern(String stringPattern, String inputString){
         return new ArrayList<String>(Arrays.asList(inputString.split(stringPattern)));
+    }
+
+    private void buildList(Item item){
+        if (!listMap.containsKey(item.getName())){
+            listMap.put(item.getName(), new Entry(item.getPrice(), 1));
+        }
+    }
+
+    public String listifier(){
+
+        return null;
     }
 
 

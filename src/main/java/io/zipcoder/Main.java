@@ -23,7 +23,8 @@ public class Main {
             System.out.println(newItem);
             itemList.add(newItem);
         }
-        System.out.println(output);
+        System.out.println(itemParser.getErrorCount());
+        System.out.println(itemParser.listifier());
         // TODO: parse the data in output into items, and display to console.
     }
 }
