@@ -21,17 +21,33 @@ public class ItemParser {
 
     public Item parseStringIntoItem(String rawItem) throws ItemParseException{
         //Pattern name = Pattern.compile("naMe(\\w*);");
-        Pattern name = Pattern.compile("(?i)name:(\\w*);price:(\\d*\\.*\\d*);type:(\\w*);expiration:(\\d*\\/\\d*\\/\\d*)");
+        Pattern name = Pattern.compile("(?i)name:(\\w*)[;|^%*!@]price:(\\d*\\.*\\d*)[;|^%*!@]type:(\\w*)[;|^%*!@]expiration:(\\d*\\/\\d*\\/\\d*)");
         Matcher matcher = name.matcher(rawItem);
         String itemName = "";
         String itemPrice = "";
         String itemType = "";
         String itemExpiration = "";
         while (matcher.find()) {
-            itemName = matcher.group(1);
-            itemPrice = matcher.group(2);
-            itemType = matcher.group(3);
-            itemExpiration = matcher.group(4);
+            try {
+                itemName = matcher.group(1);
+            } catch (Exception e){
+                throw new ItemParseException();
+            }
+            try {
+                itemPrice = matcher.group(2);
+            } catch (Exception e){
+                throw new ItemParseException();
+            }
+            try {
+                itemType = matcher.group(3);
+            } catch (Exception e){
+                throw new ItemParseException();
+            }
+            try {
+                itemExpiration = matcher.group(4);
+            } catch (Exception e){
+                throw new ItemParseException();
+            }
         }
         return new Item(itemName.toLowerCase(), Double.parseDouble(itemPrice), itemType.toLowerCase(), itemExpiration);
     }
