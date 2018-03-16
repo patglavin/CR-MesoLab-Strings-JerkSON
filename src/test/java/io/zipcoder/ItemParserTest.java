@@ -32,12 +32,14 @@ public class ItemParserTest {
         ArrayList<String> items = itemParser.parseRawDataIntoStringArray(rawMultipleItems);
         Integer actualArraySize = items.size();
         assertEquals(expectedArraySize, actualArraySize);
+        Assert.assertEquals(3, itemParser.getItemCount());
     }
 
     @Test
     public void parseStringIntoItemTest() throws ItemParseException{
         Item expected = new Item("milk", 3.23, "food","1/25/2016");
         Item actual = itemParser.parseStringIntoItem(rawSingleItem);
+        System.out.println(actual.toString());
         assertEquals(expected.toString(), actual.toString());
     }
 
