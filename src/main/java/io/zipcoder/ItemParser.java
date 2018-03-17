@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class ItemParser {
     private int itemCount;
     private int errorCount;
-    private HashMap<String, Entry> listMap = new HashMap<String, Entry>();
+    private HashMap<String, HashMap<Double, Integer>> listMap = new HashMap<String, HashMap<Double, Integer>>();
 
     public ArrayList<String> parseRawDataIntoStringArray(String rawData){
         String stringPattern = "##";
@@ -27,7 +27,6 @@ public class ItemParser {
     }
 
     public Item parseStringIntoItem(String rawItem) throws ItemParseException{
-        //Pattern name = Pattern.compile("naMe(\\w*);");
         Pattern name = Pattern.compile("(?i)name:(\\w*)[;|^%*!@]price:(\\d*\\.*\\d*)[;|^%*!@]type:(\\w*)[;|^%*!@]expiration:(\\d*\\/\\d*\\/\\d*)");
         Matcher matcher = name.matcher(rawItem);
         String itemName = "";
@@ -66,6 +65,7 @@ public class ItemParser {
         return tempItem;
     }
 
+    //pretty sure i don't need this??
     public ArrayList<String> findKeyValuePairsInRawItemData(String rawItem){
         String stringPattern = "[;|^]";
         ArrayList<String> response = splitStringWithRegexPattern(stringPattern , rawItem);
@@ -77,13 +77,22 @@ public class ItemParser {
     }
 
     private void buildList(Item item){
+        if (item.getName().equals("")) return;
         if (!listMap.containsKey(item.getName())){
-            listMap.put(item.getName(), new Entry(item.getPrice(), 1));
+            listMap.put(item.getName(), new HashMap<Double, Integer>());
+            listMap.get(item.getName()).put(item.getPrice(), 1);
+        } else {
+            if (!listMap.get(item.getName()).containsKey(item.getPrice())) {
+                listMap.get(item.getName()).put(item.getPrice(), 1);
+            } else {
+                Integer occurence = listMap.get(item.getName()).get(item.getPrice());
+                listMap.get(item.getName()).put(item.getPrice(), occurence + 1);
+            }
         }
     }
 
     public String listifier(){
-
+        System.out.println(listMap.toString());
         return null;
     }
 
