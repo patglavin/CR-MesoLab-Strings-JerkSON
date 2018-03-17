@@ -24,7 +24,7 @@ public class Main {
             itemList.add(newItem);
         }
         System.out.println(itemParser.getErrorCount());
-        System.out.println(itemParser.listifier());
+        itemParser.listifier();
         // TODO: parse the data in output into items, and display to console.
     }
 }

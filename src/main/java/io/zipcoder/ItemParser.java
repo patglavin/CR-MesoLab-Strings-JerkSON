@@ -3,6 +3,7 @@ package io.zipcoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,9 +92,22 @@ public class ItemParser {
         }
     }
 
-    public String listifier(){
+    private int total(HashMap<Double, Integer> map){
+        int total = 0;
+        for (Integer integer:map.values()) {
+            total += integer;
+        }
+        return total;
+    }
+
+    public void listifier(){
         System.out.println(listMap.toString());
-        return null;
+        for (String name:listMap.keySet()) {
+            System.out.println("\n\nName: " + name + " Seen: " + total(listMap.get(name)) + "\n================================");
+            for (Map.Entry<Double, Integer> entry:listMap.get(name).entrySet()) {
+                System.out.println("Price: " + entry.getKey() + " Seen: " + entry.getValue() + "\n-----------------------------");
+            }
+        }
     }
 
 
