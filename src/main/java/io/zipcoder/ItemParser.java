@@ -108,6 +108,7 @@ public class ItemParser {
                 System.out.println("Price: " + entry.getKey() + " Seen: " + entry.getValue() + "\n-----------------------------");
             }
         }
+        System.out.println("\n\n ERRORS: " + getErrorCount());
     }
 
 

@@ -43,11 +43,6 @@ public class ItemParserTest {
         assertEquals(expected.toString(), actual.toString());
     }
 
-    @Test(expected = ItemParseException.class)
-    public void parseBrokenStringIntoItemTest() throws ItemParseException{
-        itemParser.parseStringIntoItem(rawBrokenSingleItem);
-    }
-
     @Test
     public void findKeyValuePairsInRawItemDataTest(){
         Integer expected = 4;
